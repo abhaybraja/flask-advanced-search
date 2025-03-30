@@ -12,8 +12,6 @@ This project demonstrates how to integrate Elasticsearch with a Flask web applic
   - [3. Ingesting Data into Elasticsearch](#3-ingesting-data-into-elasticsearch)
   - [4. Running the Flask App](#4-running-the-flask-app)
   - [5. Using the Search Interface](#5-using-the-search-interface)
-- [Project Structure](#project-structure)
-- [Additional Notes](#additional-notes)
 - [License](#license)
 
 ## Overview
@@ -22,11 +20,11 @@ This project provides a complete setup that:
 - Runs an Elasticsearch instance via Docker.
 - Ingests a publicly available large dataset (CSV file) into Elasticsearch.
 - Implements a Flask app with a dynamic search interface that queries Elasticsearch using a prefix-based search.
-- Implement search UI with TailwindCSS.
+- Implement search UI with [TailwindCSS](https://tailwindcss.com/).
 
 ## Prerequisites
 
-- [Docker](https://www.docker.com/) (to run Elasticsearch)
+- [Docker](https://www.docker.com/) (to run Elasticsearch container)
 - [Python 3.x](https://www.python.org/)
 - [pip](https://pip.pypa.io/en/stable/)
 
@@ -37,6 +35,60 @@ This project provides a complete setup that:
 Pull the Elasticsearch Docker image and run a single-node cluster on port 9200:
 
 ```bash
-docker pull docker.elastic.co/elasticsearch/elasticsearch:7.17.9
-docker run -p 9200:9200 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.17.9
+docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "xpack.security.enabled=false" elasticsearch:8.7.0
 ```
+
+This will start Elasticsearch on http://localhost:9200.
+
+### 2. Setting Up the Flask App
+
+Clone the repository and navigate to the project directory:
+
+```bash
+git clone https://github.com/abhaybraja/flask-advanced-search
+cd flask-advanced-search
+```
+
+(Optional) Create and activate a virtual environment:
+
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows, use venv\Scripts\activate
+```
+
+Then install the dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Ingesting Data into Elasticsearch
+
+Check the repository has the dataset in csv file:
+
+```bash
+python .\app\elastic_search.py
+```
+
+
+### 4. Running the Flask App
+
+Start the Flask development server by running:
+
+```bash
+python run.py
+```
+
+By default, the Flask app will be accessible at http://127.0.0.1:5000. ✅🎯
+
+- 1. Open your browser and navigate to http://127.0.0.1:5000.
+- 2. Type at least three characters in the search input box.
+- 3. The app sends an API request to Elasticsearch using a prefix-based query (via the /api/search endpoint).
+- 4. The top 3 matching results (e.g., "Kristine" when entering "kri") will be displayed dynamically below the search box.
+
+Thanks & Namaste 🙏
+
+## License
+
+This project is licensed under the LGPL-2.1 License.
+
